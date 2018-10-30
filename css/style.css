@@ -5,7 +5,7 @@ body {
 
 .navbar {
   box-shadow: 2px 2px 5px #3292a6;
-  opacity: 0.9;
+  opacity: 0.8;
   background-color: white; }
   .navbar .nav-item {
     font-size: 1.5em;

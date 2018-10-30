@@ -1,0 +1,27 @@
+body {
+  margin-top: 10px;
+  max-height: 500px;
+  position: relative; }
+
+.navbar {
+  box-shadow: 2px 2px 5px #3292a6;
+  opacity: 0.9;
+  background-color: white; }
+  .navbar .nav-item {
+    font-size: 1.5em;
+    padding-right: 20px; }
+
+.left {
+  box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, -10px 0 15px -4px rgba(31, 73, 125, 0.5); }
+
+#me {
+  margin-top: -35px; }
+
+.card:hover {
+  background: #3292a6; }
+  .card:hover .fa {
+    color: #fff; }
+
+.card-testss {
+  background-color: #fff;
+  border: solid 1px; }

@@ -1,0 +1,989 @@
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Factorization-LU">Factorization LU<a class="anchor-link" href="#Factorization-LU">&#182;</a></h2><p>The idea behind LU factorization is instead of manipulating a matrix $A$ we can break the difficulty by factorizing it to a product of a lower triangular matrix $L$ and an upper triangular matrix $U$ such as 
+$A = LU$, at least we have 3 benefits from that :</p>
+<h4 id="1---Solving-a-system--$Ax-=-b$">1 - Solving a system  $Ax = b$<a class="anchor-link" href="#1---Solving-a-system--$Ax-=-b$">&#182;</a></h4><p>As  $A = LU$ instead of solving $Ax = b$ it's equivalent to solve $\begin{cases} Ly = b \\ Ux = y  \end{cases}$ we solve a triangular matrix with $O_(n^2)$ instead of $O_(n^3)$ for Gauss solving method but we obtain $L$ and $U$ with a complexity of $O_(n^3)$</p>
+<p>So you will tell me why we do that ?!</p>
+<p>we do that when we have to solve the problem for multiple $b$</p>
+<h4 id="2---Computing-determinent--$det(A)$">2 - Computing determinent  $det(A)$<a class="anchor-link" href="#2---Computing-determinent--$det(A)$">&#182;</a></h4><p>$det(A) = det(LU) = det(L) * det(U)$ since $det(T) = \prod_{i=1}^{n} t_{ii} $  when   $T$ a triangular matrix of dimension n</p>
+<h4 id="3--Computing-inverse-matrix-$A^{-1}$">3 -Computing inverse matrix $A^{-1}$<a class="anchor-link" href="#3--Computing-inverse-matrix-$A^{-1}$">&#182;</a></h4><p>Or when we want to compute the inverse of a square Matrix A, there is a technic where we apply jordan gauss method to $[A|I_n]$ the resulted Matrix is $[I_n | A^{-1}]$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="1---Computing-$L$-and-$U$">1 - Computing $L$ and $U$<a class="anchor-link" href="#1---Computing-$L$-and-$U$">&#182;</a></h3><p>In the Gauss method seen just previously, by doing some linear operations on $A$ :</p>
+<p>$
+A \in M_n(R) \forall i \in \; [k,n] L_i^{(k+1)} = L_i^{(k)} - m_i^{(k)} L_k \tag{1}\label{eq:one}
+$</p>
+<p>where $  m_i^{(k)} = \frac{a_{ik}}{a_{kk}}, k \in [2, n]$    and $a_{kk}$ is called the pivot</p>
+<p>We obtained a triangular upper matrix, and that matrix is actually $U$</p>
+<p>And you know that doing linear operations on a matrix is equivalent to mulitiply it by a matrix, since the operation expressed above in $\eqref{eq:one}$ can be reexpressed with matrix this way $A^{k + 1} = G^{(k)} A^{k}$ where</p>
+<p>$G^{(k)} = \begin{pmatrix} 
+1 &amp; .. &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; .. &amp; .. &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; .. &amp; 1 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; .. &amp; - m^{(k)}_{k+1} &amp; 1 &amp; 0 \\
+0 &amp; .. &amp; .. &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; .. &amp;  - m^{(k)}_{n} &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}$</p>
+<p>Wich lead to $U = G^{(n - 1)}..G^{(2)}G^{(1)}A$, but we want a form  $L U =  A$ wihch mean that $L =  (G^{(1)})^{-1}..(G^{(n - 2)})^{-1}(G^{(n - 1)})^{-1}$</p>
+<p>To compute $(G^{(k)})^{-1}$ we can use comatrix and det, see <a href="https://en.wikipedia.org/wiki/Invertible_matrix">Wikipedia</a></p>
+<p>or we can inteligently notice that $G^{(k)} A$ is an operation that Keep $A$ and to each line $L_i$ it does the operation $ L_i  \leftarrow  L_i - m_i^{(k)}  \;| \; i \in \; [k,n]$ so the reverse operation is $ L_i  \leftarrow  L_i + m_i^{(k)}  \;| \; i \in \; [k,n]$ then :</p>
+<p>$\Omega^{(k)} = (G^{(k)})^-1 = \begin{pmatrix} 
+1 &amp; .. &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; .. &amp; .. &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; .. &amp; 1 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; .. &amp;  m^{(k)}_{k+1} &amp; 1 &amp; 0 \\
+0 &amp; .. &amp; .. &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; .. &amp;  m^{(k)}_{n} &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}$</p>
+<p>to be sure you can compute $(G^{(k)}\Omega^{(k)})_{ij} = \sum_{p=1}^{p = n} g^{(k)}_{ip}  \omega^{(k)}_{pj} \;= \; \delta_{ij} = \; (I_n)_{ij} $ where 
+$\begin{cases} g^{(k)}_{ij} = \delta_{ij} - m^{(k)}_{i} \delta_{ik}  \;\;i &gt;= k \\ g^{(k)}_{ij} =0  \;\;i &lt; k \end{cases}$ and $\begin{cases} \omega^{(k)}_{ij} = \delta_{ij} + m^{(k)}_{i} \delta_{ik}  \;\;i &gt;= k \\ \omega^{(k)}_{ij} =0  \;\;i &lt; k \end{cases}$</p>
+<p>more than that we can show it in the notebook</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="1.1---Compute-$G^{(k)}$-and-$\Omega^{(k)}$">1.1 - Compute $G^{(k)}$ and $\Omega^{(k)}$<a class="anchor-link" href="#1.1---Compute-$G^{(k)}$-and-$\Omega^{(k)}$">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_Gk</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">A</span><span class="p">,</span> <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G</span><span class="p">[:,</span><span class="n">k</span><span class="p">]))</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">permutation_matrix</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">@</span> <span class="n">G</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sign</span> <span class="o">*</span>  <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">G</span>
+<span class="k">def</span> <span class="nf">get_Wk</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">A</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">get_Gk</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># We use permutation matrix to avoid akk = 0 </span>
+<span class="c1"># This a permutation Matrix P that when multiplied by M, we permut for M the ith and jth line</span>
+<span class="k">def</span> <span class="nf">permutation_matrix</span><span class="p">(</span><span class="n">rang</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">rang</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="k">return</span> <span class="n">P</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We take the same example as preivously in gauss method</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix A</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Vector b</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Matrix A
+ [[-2  1 -1]
+ [-3 -1  2]
+ [-2  1  2]]
+
+Vector b
+ [[  8]
+ [-11]
+ [ -3]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="1.2---Confirming-that--$G^{(k)-1}-=-\Omega^{(k)}$">1.2 - Confirming that  $G^{(k)-1} = \Omega^{(k)}$<a class="anchor-link" href="#1.2---Confirming-that--$G^{(k)-1}-=-\Omega^{(k)}$">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;G_k matrix :  </span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">get_Gk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;W_k matrix :  </span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">get_Wk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;W_k G_k product matrix wich is equal to identity : </span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">get_Wk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">)</span><span class="nd">@get_Gk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>G_k matrix :  
+
+ [[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 1. 1.]] 
+
+W_k matrix :  
+
+ [[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0. -1.  1.]] 
+
+W_k G_k product matrix wich is equal to identity : 
+
+ [[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]] 
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="1.3--U-is-equal-to-the-triangular-matrix-obtained-by-gauss-elimination-method">1.3 -U is equal to the triangular matrix obtained by gauss elimination method<a class="anchor-link" href="#1.3--U-is-equal-to-the-triangular-matrix-obtained-by-gauss-elimination-method">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We indeed had the identity by the product of $(G^{(k)}\Omega^{(k)})$,  now we are going to see that $U = G^{(n - 1)}..G^{(2)}G^{(1)}A$ where $U$ is the result of gauss elimination method</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we stack the matrix as we can do the lines operations in one time</span>
+<span class="n">stackA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+<span class="n">stackA</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ -2,   1,  -1,   8],
+       [ -3,  -1,   2, -11],
+       [ -2,   1,   2,  -3]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># preivous method</span>
+<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">stackA</span><span class="p">):</span>
+    <span class="c1">#we convert to np.float 64 because we do divisions that convert thing in float, so to avoid int cast we make it float</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stackA</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">T</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span>
+            <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span>  <span class="o">-</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">T</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gauss</span><span class="p">(</span><span class="n">stackA</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ -2. ,   1. ,  -1. ,   8. ],
+       [  0. ,  -2.5,   3.5, -23. ],
+       [  0. ,   0. ,   3. , -11. ]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#new method</span>
+<span class="n">G1</span> <span class="o">=</span> <span class="n">get_Gk</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">stackA</span><span class="p">)</span>
+<span class="n">G2</span> <span class="o">=</span> <span class="n">get_Gk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">G1</span><span class="p">)</span>
+<span class="n">G2</span> <span class="o">@</span> <span class="n">G1</span> <span class="o">@</span> <span class="n">stackA</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ -2. ,   1. ,  -1. ,   8. ],
+       [  0. ,  -2.5,   3.5, -23. ],
+       [  0. ,   0. ,   3. , -11. ]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">G2</span> <span class="o">@</span> <span class="n">G1</span> <span class="o">@</span> <span class="n">stackA</span> <span class="p">,</span><span class="n">gauss</span><span class="p">(</span><span class="n">stackA</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>True</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="1.4---Comput-L-and-U">1.4 - Comput L and U<a class="anchor-link" href="#1.4---Comput-L-and-U">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># so to get U we define </span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+<span class="k">def</span> <span class="nf">get_U</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">list_G</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">get_Gk</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+        <span class="n">list_G</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span><span class="n">a</span><span class="nd">@b</span><span class="p">,</span> <span class="n">list_G</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">@</span>  <span class="n">A</span>  
+<span class="c1">#and to get L we define </span>
+<span class="k">def</span> <span class="nf">get_L</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">list_G</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">get_Wk</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+        <span class="n">list_G</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span><span class="n">a</span><span class="nd">@b</span><span class="p">,</span> <span class="n">list_G</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">U</span> <span class="o">=</span> <span class="n">get_U</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">U</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[11]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[-2. ,  1. , -1. ],
+       [ 0. , -2.5,  3.5],
+       [ 0. ,  0. ,  3. ]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">get_L</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> 
+<span class="n">L</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[1. , 0. , 0. ],
+       [1.5, 1. , 0. ],
+       [1. , 0. , 1. ]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># YES LU = A is RIGHT</span>
+<span class="n">L</span> <span class="o">@</span> <span class="n">U</span>  <span class="o">==</span> <span class="n">A</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ True,  True,  True],
+       [ True,  True,  True],
+       [ True,  True,  True]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="&#160;1.5---solving-an-up-and-low-triangular-matrix-functions">&#160;1.5 - solving an up and low triangular matrix functions<a class="anchor-link" href="#&#160;1.5---solving-an-up-and-low-triangular-matrix-functions">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">solve_up</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">b0</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
+    <span class="c1">#we solve the last equation (line) in the matrix</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">b0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">U</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="c1">#we go upper to solve the equations above using the last variable solved</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">X</span><span class="p">[(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">U</span><span class="p">[</span><span class="n">k</span> <span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">]))</span> <span class="o">*</span> <span class="p">(</span><span class="n">b0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+    <span class="c1"># we reverse W because, we solve it from down to up</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">solve_down</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b0</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b0</span><span class="p">)</span>
+    <span class="c1">#we solve the last equation (line) in the matrix</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+    <span class="c1">#we go upper to solve the equations above using the last variable solved</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([[</span><span class="n">L</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">]))</span> <span class="o">*</span> <span class="p">(</span><span class="n">b0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+    <span class="c1"># we reverse W because, we solve it from down to up</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="1.6---Confirming-the-theory">1.6 - Confirming the theory<a class="anchor-link" href="#1.6---Confirming-the-theory">&#182;</a></h4><p>$Ax = b$ it's equivalent to solve $\begin{cases} Ly = b \\ Ux = y  \end{cases}$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">solve_down</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">solve_up</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we obtain as expexted  A X = b which mean that X is our solution</span>
+<span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">X</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[17]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>True</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="2---Computing-determinent--det(A)">2 - Computing determinent  det(A)<a class="anchor-link" href="#2---Computing-determinent--det(A)">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="2.1-Leibinz-Formula">2.1 Leibinz Formula<a class="anchor-link" href="#2.1-Leibinz-Formula">&#182;</a></h4><p>In this part instead of using numpy for getting the determinant we are going to use <a href="https://en.wikipedia.org/wiki/Leibniz_formula_for_determinants">Leibniz Formula</a> described by :</p>
+<p>$det(A) = \sum_{\sigma \in Sn} sign(\sigma) \, \prod_{i = 1}^{i = n} a_{\sigma(i),i}$</p>
+<p>where $\sigma$ is a permutation for $\{1,2,...,n\}$ in the permutation groupe $S_n$  and $sign$ return 1 -1 for even and odd permutations respectively</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">permutations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sigma</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sigma</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">sigma</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">leibinz_formula</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">detA</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">detA</span> <span class="o">+=</span> <span class="n">signature</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">A</span><span class="p">[</span><span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="k">return</span> <span class="n">detA</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">leibinz_formula</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[21]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>15</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="2.2---determinent-of-a-triangular">2.2 - determinent of a triangular<a class="anchor-link" href="#2.2---determinent-of-a-triangular">&#182;</a></h4><p>When you have a triangular matrix $T_n$ so the formula for the det is :</p>
+<p>$det(T_n) = \prod_{i = 1}^{i = n}t_{i,i}$</p>
+<p>you can check the <a href="https://proofwiki.org/wiki/Determinant_of_Triangular_Matrix">proof</a></p>
+<p>there for $det(A) = det(L) * det(U) =  \prod_{i = 1}^{i = n}l_{i,i} *  \prod_{i = 1}^{i = n}u_{i,i} $</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># diagonal matrix product </span>
+<span class="k">def</span> <span class="nf">product_diag</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">detA_li</span> <span class="o">=</span> <span class="n">leibinz_formula</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">detA_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">detA_lu</span> <span class="o">=</span> <span class="n">product_diag</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">*</span> <span class="n">product_diag</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;determinent with liebniz formula : &quot;</span><span class="p">,</span> <span class="n">detA_li</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;determinent with numpy : &quot;</span><span class="p">,</span> <span class="n">detA_np</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;determinent with factorization LU : &quot;</span><span class="p">,</span> <span class="n">detA_lu</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>determinent with liebniz formula :  15
+determinent with numpy :  15.000000000000007
+determinent with factorization LU :  15.0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="3--Computing-inverse-matrix-$A^{-1}$">3 -Computing inverse matrix $A^{-1}$<a class="anchor-link" href="#3--Computing-inverse-matrix-$A^{-1}$">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="--3.1-Gauss-Jordan-elimination">- 3.1 Gauss Jordan elimination<a class="anchor-link" href="#--3.1-Gauss-Jordan-elimination">&#182;</a></h4><p>The method that we have seen until now is Gauss method, where we operate transformations on $A$ until obtaining
+the echlon form (the triangular matrix) but when we go further and the triangular matrix is identity, it usually called Gauss Jordan elimination.</p>
+<p>The idea is by transorming $[A|I_n]$ to $[I_n|B]$ is to record the elementary operations performed on A in B such as $B = A^{-1}$, you can see it as if you had a system $AX = X^{'}$ and you find $X= BX^{'} $</p>
+<p>Check more <a href="https://en.wikipedia.org/wiki/Gaussian_elimination">details</a></p>
+<p>For our implementation we obtain the upper matrix $U$ then we operate transformations to make diagonal</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="--3.2-Make-diagonal-out-of-Upper-matrix">- 3.2 Make diagonal out of Upper matrix<a class="anchor-link" href="#--3.2-Make-diagonal-out-of-Upper-matrix">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="n">U</span><span class="p">):</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">U</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">/</span><span class="n">U</span><span class="p">[</span><span class="n">p</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">U</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">U</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">U</span>
+        
+    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="--3.2-Make-identity-out-of-diagonal">- 3.2 Make identity out of diagonal<a class="anchor-link" href="#--3.2-Make-identity-out-of-diagonal">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">make_id_fdiag</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">D</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="--3.3-getting-the-inverse-$A^{-1}$">- 3.3 getting the inverse $A^{-1}$<a class="anchor-link" href="#--3.3-getting-the-inverse-$A^{-1}$">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_inv</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">In</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">stackA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">In</span><span class="p">))</span>
+    <span class="n">IB</span> <span class="o">=</span> <span class="n">make_id_fdiag</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">get_U</span><span class="p">(</span><span class="n">stackA</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">IB</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># testing </span>
+<span class="n">get_inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[28]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ 1.00000000e+00,  1.38777878e-17, -2.77555756e-17],
+       [ 0.00000000e+00,  1.00000000e+00,  1.11022302e-16],
+       [ 0.00000000e+00,  0.00000000e+00,  1.00000000e+00]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">get_inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[29]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>True</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Thank you ! hope that i have brought some value in LU Factorization</p>
+
+</div>
+</div>
+</div>
+ 
+

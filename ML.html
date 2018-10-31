@@ -2,12 +2,19 @@
 <html lang="en" dir="ltr">
 
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script>
+      $(document).ready(function () {
+          $("div[data-includeHTML]").each(function () {
+              $(this).load($(this).attr("data-includeHTML"));
+          });
+      });
+  </script>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="https://senhaji-rhazi-hamza.github.io/css/style.css">
   <link rel="stylesheet" href="https://senhaji-rhazi-hamza.github.io/css/jupyter.css">
   <!-- <link rel="stylesheet" href="css/style.scss"> -->
-  <script src="http://www.w3schools.com/lib/w3data.js"></script>
 
   <!-- <script>
   $(function(){
@@ -19,7 +26,7 @@
 
 </head>
 
-<body data-spy="scroll" data-target="#navbar-example3" data-offset="150">
+<body data-spy="scroll" data-target="#navbar-example3" data-offset="50">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a href="index.html" class="navbar-brand">
@@ -148,9 +155,6 @@
                 </ul>
 
 
-
-
-
           </li>
           <li>
             <h4><b> Dimentionality reduction</b></h4>
@@ -164,8 +168,30 @@
           </li>
 
         </ul>
-        <h2 class="text-center"> Gauss methodEE</h2>
-        <div w3-include-html="resources_algo/Gauss.html"></div> 
+        <h2 class="text-center py-5 display-3"> <b>Linear ALGEBRA</b> </h2>
+        <div class="el_sec" id="GSS" >
+          <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gauss Method</b></h3> </center>
+          <div data-includeHTML="resources_algo/Gauss.html" ></div>
+        </div>
+          <hr class="m-y-md py-5">
+        <div class="el_sec" id="FLU" >
+          <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Factorization LU</b></h3> </center>
+            <div data-includeHTML="resources_algo/FactLU.html" ></div>
+        </div>
+          <hr class="m-y-md py-5">
+          <div class="el_sec" id="JGS" >
+            <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Jacobi and Gauss Seidel method</b></h3> </center>
+              <div data-includeHTML="resources_algo/Jacobi_Gauss_Seidel.html" ></div>
+          </div>
+            <hr class="m-y-md py-5">
+            <div class="el_sec" id="GCG" >
+              <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gradient and conjugate gradient method</b></h3> </center>
+                <div data-includeHTML="resources_algo/Gradient.html" ></div>
+            </div>
+
+
+         <!-- <div data-includeHTML="Gauss.html" ></div> -->
+         <!-- <div data-includeHTML="FactLU.html" id="FLU"></div> -->
 
 
 
@@ -186,7 +212,7 @@
               <nav class="nav nav-pills flex-column">
                 <a class="nav-link ml-3 " href="#GSS" style="font-size:90%">Gauss method</a>
                 <a class="nav-link ml-3 " href="#FLU" style="font-size:90%">Factorization LU</a>
-                  <a class="nav-link ml-3 " href="#JGSM" style="font-size:90%">Jacobi and Gauss Seidel method</a>
+                  <a class="nav-link ml-3 " href="#JGS" style="font-size:90%">Jacobi and Gauss Seidel method</a>
                 <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
 
                 <a class="nav-link ml-3 " href="#GCG" style="font-size:90%">Gradient and conjugate gradient method</a>
@@ -227,6 +253,7 @@
   </div>
 
 </body>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

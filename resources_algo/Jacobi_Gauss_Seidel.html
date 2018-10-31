@@ -1,0 +1,486 @@
+<div class="element" name="Jacobi_Gauss_Seidel">
+
+  <div class="cell border-box-sizing text_cell rendered">
+    <div class="prompt input_prompt">
+    </div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+        <h1 id="Jacobi-and-Gauss-Seidel-Method">Jacobi and Gauss Seidel Method<a class="anchor-link" href="#Jacobi-and-Gauss-Seidel-Method">&#182;</a></h1>
+        <p>In this Part we are going to see 2 other iterative methods to solve linear systems,Jacobi Method and Gauss seidel Method</p>
+        <h2 id="1-Jacobi-Method">1-Jacobi Method<a class="anchor-link" href="#1-Jacobi-Method">&#182;</a></h2>
+        <p>Jacobi method is an iterative method to solve systems $Ax = b$ by rewriting the system (under conditions on A) in an equivalent one $x = Bx + f$ and consider the sequence $x^{n+1} = Bx^{n} + f$ where $\lim_{n\to\infty} \lVert x - x^n
+          \rVert = 0 $, by starting from a point in space we endup (under conditions on A) to converge
+          to $x$ the solution of $Ax = b$</p>
+        <p>Let rewrite $A = D - E - F$ where</p>
+        <ul>
+          <li>
+            <p>D is the diagonal elements of $A$</p>
+          </li>
+          <li>
+            <p>$E$ is - the lower triangular matrix of $A$ where $e_{ij} = -a_{ij}$ for $i &gt; j$ else $e_{ij} = 0$</p>
+          </li>
+          <li>
+            <p>F is - the upper triangular matrix of $A$ where $e_{ij} = -a_{ij}$ for $i &lt; j$ else $e_{ij} = 0$</p>
+          </li>
+        </ul>
+        <p>We obtain<br>
+          $
+          \begin{align}
+          Ax = b \iff (D - E - F) x = b \\
+          \iff Dx =(E + F)x + b \\
+          \iff x = D^{-1}(E + F)x + D^{-1}b\\
+          \iff x = Bx + f \; \\where \; B = D^{-1}(E + F)= I - D^{-1} A \; and \; f = D^{-1}b
+          \end{align}
+          $</p>
+        <h3 id="Condition-of-existence-:">Condition of existence :<a class="anchor-link" href="#Condition-of-existence-:">&#182;</a></h3>
+        <p>Let define the error $e^{k+1} = x^{k + 2} - x^{k + 1}$:</p>
+        <p>$\begin{align}
+          x^{k + 2} - x^{k + 1} = (I - D^{-1} A)x^{k+ 1} + D^{-1}b - ((I - D^{-1} A)x^{k} + D^{-1}b)\\
+          \iff x^{k + 2} - x^{k + 1} = (I - D^{-1} A)(x^{k+ 1} - x^{k})\\
+          \iff e^{k+2} = (I - D^{-1} A)e^{k + 1} \\
+          \iff e^{k+2} = Be^{k + 1}\\
+          \iff e^{k+1} = B^{k + 1}e^{0}
+          \end{align}
+          $</p>
+        <h4 id="Theorems">Theorems<a class="anchor-link" href="#Theorems">&#182;</a></h4>
+        <ul>
+          <li>
+            <p>$\lim_{k\to\infty} \lVert B^k \rVert = 0$ is a necesssary and sufficient condition for the convergence of Jacobi method</p>
+          </li>
+          <li>
+            <p>what ever starting point $x^0$ the method converge for the systems where A is strictly diagonally dominant, it means what ever square submatrice we consider from A, this submatrice is inversible</p>
+          </li>
+        </ul>
+        <h2 id="2-Gauss-Seidel-Method">2-Gauss Seidel Method<a class="anchor-link" href="#2-Gauss-Seidel-Method">&#182;</a></h2>
+        <p>Gauss seidel method, has nearly the same matricial expression than jacobi method, but it is a sequential
+          method it can't be parallelized in oposition to jacobi that can be</p>
+        <p>Before giving the matricial expression we are going to explain the idea and what happens:</p>
+        <p>The idea is still to construct a sequence $x^n$ that converge to the solution of the system $Ax=b$.</p>
+        <p>Given a kth point in the sequence $x^k = (x_1^{k}, .... x_n^{k}) \in {\Bbb R}^n$, to compute $x^{k+1} = (x_1^{k + 1}, .... x_n^{k + 1})$, we compute element by element by solving (under the condition $aii \neq 0$) the equations :</p>
+        <p>for $i \in [1, n]$:</p>
+        <p>$a_{i1}x_1^{k}+...+a_{ii}x_i^{k+1}+....+a_{in}x_1^{k}=b_i$ we get x_i^{k+1} at equation (i)</p>
+        <p>after doing that for all $i \in [1, n]$, we call it an iteration.</p>
+        <p>Now let have the matricial form for those operations:</p>
+        <p>$A = D - E - F$</p>
+        <p>$\begin{align}
+          A x = b\\
+          \iff&amp; (D - E - F)x = b\\
+          \iff&amp; (D - E - F)x = b\\
+          \iff&amp; (D - E)x = Fx + b\\
+          \end{align}
+          $</p>
+        <p>that equation $(D - E)x^{k + 1} = Fx^k + b$ is equivalent to one Gauss seidel iteration</p>
+        <h3 id="Condition-of-existence-:">Condition of existence :<a class="anchor-link" href="#Condition-of-existence-:">&#182;</a></h3>
+        <h4 id="Theorems">Theorems<a class="anchor-link" href="#Theorems">&#182;</a></h4>
+        <p>Gauss Seidel method converge if</p>
+        <ul>
+          <li>
+            <p>A is defined matrix positive</p>
+          </li>
+          <li>
+            <p>A is strictly diagonally dominant</p>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+  <div class="cell border-box-sizing text_cell rendered">
+    <div class="prompt input_prompt">
+    </div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+        <h3 id="1-Jacobi-Method">1 Jacobi Method<a class="anchor-link" href="#1-Jacobi-Method">&#182;</a></h3>
+        <h4 id="1.1---Matrix-constructions">1.1 - Matrix constructions<a class="anchor-link" href="#1.1---Matrix-constructions">&#182;</a></h4>
+      </div>
+    </div>
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[1]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="c1"># We take a symetric definite-positve matrix to fit the rules of algorithm convergences</span>
+<span class="c1"># and we take a b(1,1,1) we are hoping to find the same thing with jasobi and gauss</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix A</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Vector b</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt"></div>
+
+
+          <div class="output_subarea output_stream output_stdout output_text">
+            <pre>Matrix A
+ [[ 2 -1  0]
+ [-1  2 -1]
+ [ 0 -1  2]]
+
+Vector b
+ [[1]
+ [1]
+ [1]]
+</pre>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[2]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="k">def</span> <span class="nf">get_E</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">j</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_F</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_D</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="p">[[</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[3]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">get_E</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">get_F</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">get_D</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F is : </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">F</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">D is : </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">E is : </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt"></div>
+
+
+          <div class="output_subarea output_stream output_stdout output_text">
+            <pre>F is :
+ [[0 1 0]
+ [0 0 1]
+ [0 0 0]]
+
+D is :
+ [[2 0 0]
+ [0 2 0]
+ [0 0 2]]
+
+E is :
+ [[0 0 0]
+ [1 0 0]
+ [0 1 0]]
+</pre>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[4]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="c1"># our result seems to be confirmed</span>
+<span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="n">E</span> <span class="o">-</span> <span class="n">F</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt output_prompt">Out[4]:</div>
+
+
+
+
+          <div class="output_text output_subarea output_execute_result">
+            <pre>True</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing text_cell rendered">
+    <div class="prompt input_prompt">
+    </div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+        <h4 id="1.2---Jacobi-algorithm">1.2 - Jacobi algorithm<a class="anchor-link" href="#1.2---Jacobi-algorithm">&#182;</a></h4>
+      </div>
+    </div>
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[5]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="c1">#a random point in a &quot;space&quot; looks like</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10000</span>
+<span class="n">x0</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+          <div class="output_text output_subarea output_execute_result">
+            <pre>array([[5886.65827897],
+       [2702.92548757],
+       [2387.194153  ]])</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[6]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="c1"># we construct the function loop where we will iterate the sequence</span>
+<span class="k">def</span> <span class="nf">jacobi</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">get_E</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">get_F</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">get_D</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">E</span> <span class="o">+</span> <span class="n">F</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10000</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">B</span> <span class="o">@</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">@</span> <span class="n">b</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">x1</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">B</span> <span class="o">@</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">@</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">x1</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[7]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="n">x_jacobi</span> <span class="o">=</span> <span class="n">jacobi</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">x_jacobi</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+          <div class="output_text output_subarea output_execute_result">
+            <pre>array([[1.50001013],
+       [2.00001557],
+       [1.50001013]])</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing text_cell rendered">
+    <div class="prompt input_prompt">
+    </div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+        <h3 id="2-Gauss-seidel-Method">2 Gauss seidel Method<a class="anchor-link" href="#2-Gauss-seidel-Method">&#182;</a></h3>
+        <h4 id="2.1-Gauss-seidel-implem">2.1 Gauss seidel implem<a class="anchor-link" href="#2.1-Gauss-seidel-implem">&#182;</a></h4>
+      </div>
+    </div>
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[8]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="c1"># we construct the function loop where we will iterate the sequence (we are borowing some functions from jacobi part)</span>
+<span class="k">def</span> <span class="nf">gauss_seidel</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">get_E</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">get_F</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">get_D</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10000</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="n">E</span><span class="p">)</span> <span class="o">@</span> <span class="n">F</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="n">E</span><span class="p">)</span> <span class="o">@</span> <span class="n">x0</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">x1</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">B</span> <span class="o">@</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="n">E</span><span class="p">)</span> <span class="o">@</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">x1</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[9]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="n">x_gauss_seidel</span> <span class="o">=</span> <span class="n">gauss_seidel</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">x_gauss_seidel</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+          <div class="output_text output_subarea output_execute_result">
+            <pre>array([[1.50000363],
+       [2.00000363],
+       [1.50000182]])</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+      <div class="prompt input_prompt">In&nbsp;[10]:</div>
+      <div class="inner_cell">
+        <div class="input_area">
+          <div class=" highlight hl-ipython3">
+            <pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">x_jacobi</span><span class="p">,</span> <span class="n">x_gauss_seidel</span><span class="p">)</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="output_wrapper">
+      <div class="output">
+
+
+        <div class="output_area">
+
+          <div class="prompt output_prompt">Out[10]:</div>
+
+
+
+
+          <div class="output_text output_subarea output_execute_result">
+            <pre>True</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="cell border-box-sizing text_cell rendered">
+    <div class="prompt input_prompt">
+    </div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+        <p>Thank you ! hope that i have brought some value in Gauss seidel and Jacobi method</p>
+
+      </div>
+    </div>
+  </div>
+</div>

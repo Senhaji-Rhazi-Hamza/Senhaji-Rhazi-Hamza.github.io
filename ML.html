@@ -4,7 +4,7 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script>
-      $(document).ready(function () {
+    $(document).ready(function () {
           $("div[data-includeHTML]").each(function () {
               $(this).load($(this).attr("data-includeHTML"));
           });
@@ -23,19 +23,6 @@
   </script> -->
   <meta charset="utf-8">
   <title>HSR</title>
-  <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-            tex2jax: {
-              inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-              processEscapes: true,
-              displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-              processEnvironments: true
-            }
-          });
-        </script>
-        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-      
 </head>
 
 <body data-spy="scroll" data-target="#navbar-example3" data-offset="50">
@@ -116,8 +103,8 @@
             <h2 class=" text-center mb-4"> <b>Presentation </b></h2>
             <p style="font-size:100%">
               The idea of this tutorial came from a frustration felt when i was trying to understand what behind the machine learning algorithms,
-               i haven't found an easy way to understand them, it was frustrating, but i came to understand some of it and i was amazed,
-               so this tutorial aims to share this amazement felt after coming over those frustrations
+              i haven't found an easy way to understand them, it was frustrating, but i came to understand some of it and i was amazed,
+              so this tutorial aims to share this amazement felt after coming over those frustrations
 
 
             </p>
@@ -125,46 +112,50 @@
             <hr class="m-y-md mb-4 mt-4">
             <p style="font-size:100%">
               There is many rigorous definitions of Machine learning, but i will define it practically:
-              <b>Machine learning </b> is a game where you have many samples (inputs) <b>{x1, x2, ....,xn}</b> and many labels <b>{y1, y2, ....,yn}</b> (outputs) that corresponds recpectively, the aim of this game is to guess what is the function <b> <i> f(x)</i></b>              that allows to go from the samples to the labels Machine learning is the numerous mathematical methods to guess what <b> <i> f(x)</i></b> is
+              <b>Machine learning </b> is a game where you have many samples (inputs) <b>{x1, x2, ....,xn}</b> and many labels <b>{y1, y2, ....,yn}</b> (outputs) that corresponds recpectively, the aim of this game is to guess what is the function <b>
+                <i> f(x)</i></b> that allows to go from the samples to the labels Machine learning is the numerous mathematical methods to guess what <b> <i> f(x)</i></b> is
             </p>
             <hr class="m-y-md mb-4 mt-4">
             <p style="font-size:100%">
               That being said, we can't really understand Machine learning without some notions of linear algebra like gradient descent, so before attacking directly the subject, we are going to do some linear algebra algorithms for problem solving
               then we will use the gradient for problem solving, then we go to machine learning algorithms </p>
 
-                  <hr class="m-y-md mb-4 mt-4">
-                  Please for any feed back, write me an email <b>hamza.senhajirhazi@gmail.com</b> with the object "[FEEDBACK]" in the mail as i can find it
-                  back when i will be searching for the mail in order to reply, thank you !
+            <hr class="m-y-md mb-4 mt-4">
+            Please for any feed back, write me an email <b>hamza.senhajirhazi@gmail.com</b> with the object "[FEEDBACK]" in the mail as i can find it
+            back when i will be searching for the mail in order to reply, thank you !
           </div>
         </div>
-        <u>  <i>  <h3 class="text-center mb-5" id="Contents">Contents</h3></i> </u>
+        <u> <i>
+            <h3 class="text-center mb-5" id="Contents">Contents</h3>
+          </i> </u>
         <ul style="list-style:None; font-size:120%">
           <li>
-            <h4> <b>Linear Algebra for system solving </b> </h4></li>
+            <h4> <b>Linear Algebra for system solving </b> </h4>
+          </li>
 
 
-              <ul style="list-style:None;color:rgba(0,200,255,1)">
-                <li>Gauss method</li>
-                <li>Factorization LU</li>
-                <li>Jacobi and Gauss Seidel method</li>
-              </ul>
+          <ul style="list-style:None;color:rgba(0,200,255,1)">
+            <li>Gauss method</li>
+            <li>Factorization LU</li>
+            <li>Jacobi and Gauss Seidel method</li>
+          </ul>
 
-                <ul style="list-style:None;color:rgba(0,200,255,1)">
-                <li>Gradient and conjugate gradient method  </li>
-                <li>Newton descent</li>
-                <li>Generalization of gradient and newton descent + lagrangien</li>
-              </ul>
+          <ul style="list-style:None;color:rgba(0,200,255,1)">
+            <li>Gradient and conjugate gradient method </li>
+            <li>Newton descent</li>
+            <li>Generalization of gradient and newton descent + lagrangien</li>
+          </ul>
           <li>
             <h4> <b>Machine learning Algorithms</b> </h4>
 
-                <ul style="list-style:None;color:rgba(0,200,255,1)">
-                  <li> Linear regression </li>
-                  <li> Support vector machine </li>
-                  <li> Decision Tree </li>
-                  <li> Random forest </li>
-                  <li> Bayesian classification </li>
-                  <li> Expectation maximization (generative mixture models)(generalization of k means) </li>
-                </ul>
+            <ul style="list-style:None;color:rgba(0,200,255,1)">
+              <li> Linear regression </li>
+              <li> Support vector machine </li>
+              <li> Decision Tree </li>
+              <li> Random forest </li>
+              <li> Bayesian classification </li>
+              <li> Expectation maximization (generative mixture models)(generalization of k means) </li>
+            </ul>
 
 
           </li>
@@ -181,83 +172,91 @@
 
         </ul>
         <h2 class="text-center py-5 display-3"> <b>Linear ALGEBRA</b> </h2>
-        <div class="el_sec" id="GSS" >
-          <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gauss Method</b></h3> </center>
-          <div data-includeHTML="resources_algo/Gauss.html" ></div>
+        <div class="el_sec" id="GSS">
+          <center>
+            <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gauss Method</b></h3>
+          </center>
+          <div data-includeHTML="resources_algo/Gauss.html"></div>
         </div>
-          <hr class="m-y-md py-5">
-        <div class="el_sec" id="FLU" >
-          <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Factorization LU</b></h3> </center>
-            <div data-includeHTML="resources_algo/FactLU.html" ></div>
+        <hr class="m-y-md py-5">
+        <div class="el_sec" id="FLU">
+          <center>
+            <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Factorization LU</b></h3>
+          </center>
+          <div data-includeHTML="resources_algo/FactLU.html"></div>
         </div>
-          <hr class="m-y-md py-5">
-          <div class="el_sec" id="JGS" >
-            <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Jacobi and Gauss Seidel method</b></h3> </center>
-              <div data-includeHTML="resources_algo/Jacobi_Gauss_Seidel.html" ></div>
-          </div>
-            <hr class="m-y-md py-5">
-            <div class="el_sec" id="GCG" >
-              <center> <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gradient and conjugate gradient method</b></h3> </center>
-                <div data-includeHTML="resources_algo/Grad.html" ></div>
-            </div>
+        <hr class="m-y-md py-5">
+        <div class="el_sec" id="JGS">
+          <center>
+            <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Jacobi and Gauss Seidel method</b></h3>
+          </center>
+          <div data-includeHTML="resources_algo/Jacobi_Gauss_Seidel.html"></div>
+        </div>
+        <hr class="m-y-md py-5">
+        <div class="el_sec" id="GCG">
+          <center>
+            <h3 class="display-4" style="color:rgba(0,200,255,1)"><b>Gradient and conjugate gradient method</b></h3>
+          </center>
+          <div data-includeHTML="resources_algo/Gradient.html"></div>
+        </div>
 
 
-         <!-- <div data-includeHTML="Gauss.html" ></div> -->
-         <!-- <div data-includeHTML="FactLU.html" id="FLU"></div> -->
+        <!-- <div data-includeHTML="Gauss.html" ></div> -->
+        <!-- <div data-includeHTML="FactLU.html" id="FLU"></div> -->
 
 
 
 
       </div>
 
-      <div class="col-md-3 d-none d-lg-block "  >
+      <div class="col-md-3 d-none d-lg-block ">
 
 
-          <nav id="navbar-example3" class="navbar navbar-light bg-light sticky-top " style="top:100px">
-            <div class="" style="top:100px;max-height:80vh; overflow-y:scroll">
+        <nav id="navbar-example3" class="navbar navbar-light bg-light sticky-top " style="top:100px">
+          <div class="" style="top:100px;max-height:80vh; overflow-y:scroll">
 
-          <nav class="nav nav-pills flex-column">
-            <a class="nav-link" href="#LALG">Linear Algebra for system solving </a>
-                <!-- <a class="nav-link" href="#PFEXP">Professional experiences</a>
+            <nav class="nav nav-pills flex-column">
+              <a class="nav-link" href="#LALG">Linear Algebra for system solving </a>
+              <!-- <a class="nav-link" href="#PFEXP">Professional experiences</a>
                 <a class="nav-link" href="#SKP">Skills and projects</a> -->
 
               <nav class="nav nav-pills flex-column">
                 <a class="nav-link ml-3 " href="#GSS" style="font-size:90%">Gauss method</a>
                 <a class="nav-link ml-3 " href="#FLU" style="font-size:90%">Factorization LU</a>
-                  <a class="nav-link ml-3 " href="#JGS" style="font-size:90%">Jacobi and Gauss Seidel method</a>
+                <a class="nav-link ml-3 " href="#JGS" style="font-size:90%">Jacobi and Gauss Seidel method</a>
                 <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
 
                 <a class="nav-link ml-3 " href="#GCG" style="font-size:90%">Gradient and conjugate gradient method</a>
                 <a class="nav-link ml-3 " href="#NWM" style="font-size:90%">Newton descent</a>
-                  <a class="nav-link ml-3 " href="#GGND" style="font-size:90%">Generalization of gradient and newton descent + lagrangien</a>
+                <a class="nav-link ml-3 " href="#GGND" style="font-size:90%">Generalization of gradient and newton descent + lagrangien</a>
                 <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
               </nav>
               <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
 
-            <a class="nav-link" href="#LG">Machine learning Algorithms</a>
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link ml-3 " href="#LR" style="font-size:90%">Linear regression</a>
-              <a class="nav-link ml-3 " href="#SVM" style="font-size:90%">Support vector machine</a>
+              <a class="nav-link" href="#LG">Machine learning Algorithms</a>
+              <nav class="nav nav-pills flex-column">
+                <a class="nav-link ml-3 " href="#LR" style="font-size:90%">Linear regression</a>
+                <a class="nav-link ml-3 " href="#SVM" style="font-size:90%">Support vector machine</a>
                 <a class="nav-link ml-3 " href="#DT" style="font-size:90%">Decision Tree</a>
-              <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
+                <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
 
-              <a class="nav-link ml-3 " href="#RF" style="font-size:90%">Random forest</a>
-              <a class="nav-link ml-3 " href="#BC" style="font-size:90%">Bayesian classification</a>
+                <a class="nav-link ml-3 " href="#RF" style="font-size:90%">Random forest</a>
+                <a class="nav-link ml-3 " href="#BC" style="font-size:90%">Bayesian classification</a>
                 <a class="nav-link ml-3 " href="#EM" style="font-size:90%">Expectation maximization (generative mixture models)(generalization of k means)</a>
-              <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
-            </nav>
-            <a class="nav-link" href="#OTHI">Dimentionality reduction</a>
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link ml-3 " href="#PCA" style="font-size:90%">Principal component analysis</a>
-              <a class="nav-link ml-3 " href="#LDA" style="font-size:90%">Linear discriminant analysis (LDA)</a>
+                <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
+              </nav>
+              <a class="nav-link" href="#OTHI">Dimentionality reduction</a>
+              <nav class="nav nav-pills flex-column">
+                <a class="nav-link ml-3 " href="#PCA" style="font-size:90%">Principal component analysis</a>
+                <a class="nav-link ml-3 " href="#LDA" style="font-size:90%">Linear discriminant analysis (LDA)</a>
                 <a class="nav-link ml-3 " href="#KPCA" style="font-size:90%">Kernel PCA</a>
-              <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
+                <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
 
-              <a class="nav-link ml-3 " href="#KLDA" style="font-size:90%">Kernel LDA</a>
-                  <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
+                <a class="nav-link ml-3 " href="#KLDA" style="font-size:90%">Kernel LDA</a>
+                <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
+              </nav>
             </nav>
-          </nav>
-            </div>
+          </div>
         </nav>
 
       </div>
@@ -272,5 +271,26 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/javascript">
+  if (window.MathJax) {
+    MathJax.Hub.Queue(
+      ["Typeset", MathJax.Hub]
+    );
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true,
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEnvironments: true
+          }
+        });
+      </script>
+
 
 </html>

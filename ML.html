@@ -262,7 +262,27 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script type="text/x-mathjax-config"> MathJax.Hub.Config(/*{ TeX: { equationNumbers: { autoNumber: "all" } } }*/); </script>
+  <script type="text/javascript">
+  if (window.MathJax) {
+    MathJax.Hub.Queue(
+      ["resetEquationNumbers",MathJax.InputJax.TeX],
+      ["Typeset",MathJax.Hub]
+    );
+  }
+  </script>
 
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+              processEscapes: true,
+              displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+              processEnvironments: true
+            }
+          });
+        </script>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -271,27 +291,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<script type="text/x-mathjax-config"> MathJax.Hub.Config(/*{ TeX: { equationNumbers: { autoNumber: "all" } } }*/); </script>
-<script type="text/javascript">
-if (window.MathJax) {
-  MathJax.Hub.Queue(
-    ["resetEquationNumbers",MathJax.InputJax.TeX],
-    ["Typeset",MathJax.Hub]
-  );
-}
-</script>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-          tex2jax: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-            processEscapes: true,
-            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-            processEnvironments: true
-          }
-        });
-      </script>
 
 
 </html>

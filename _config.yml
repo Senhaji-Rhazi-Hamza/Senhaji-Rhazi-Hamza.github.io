@@ -1,6 +1,6 @@
-title: SENHAJI RHAZI Hamza Website on Machine Learning Data Science
+title: "SENHAJI RHAZI Hamza Website on Machine Learning Data Science"
 
-description: This website is constructed with the purpose to be a resource course in informatics/mathematics.
-I'm making the bet to explain some "hard" concepts staying rigorous and clear enough to be understood by just 1 year math university background. you will discover a list of machine learning algorithms like support vector machines (svm), decisions tree, bayesian classifier, and more, ther also a course on algorithmic and probability that will come
+description: "This website is constructed with the purpose to be a resource course in informatics/mathematics.
+I'm making the bet to explain some "hard" concepts staying rigorous and clear enough to be understood by just 1 year math university background. you will discover a list of machine learning algorithms like support vector machines (svm), decisions tree, bayesian classifier, and more, ther also a course on algorithmic and probability that will come"
 plugins:
   - jekyll-seo-tag

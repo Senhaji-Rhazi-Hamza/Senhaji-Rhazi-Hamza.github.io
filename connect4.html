@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+
+  <link rel="stylesheet" href="connect4.css">
+</head>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<!-- <script>
+function createTable(){
+
+	mytable = $('<table></table>').attr({ id: "basicTable" });
+	// var rows = new Number($("#rowcount").val());
+	// var cols = new Number($("#columncount").val());
+  var rows = 3
+  var cols = 3
+	var tr = [];
+	for (var i = 0; i < rows; i++) {
+		var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(mytable);
+		for (var j = 0; j < cols; j++) {
+			$('<td></td>').text("text1").appendTo(row);
+		}
+
+	}
+	console.log("TTTTT:"+mytable.html());
+ return mytable
+
+
+}
+</script> -->
+<body>
+  <script type="text/javascript" src="connect4.js">
+</script>
+<center>
+ <h1  style="margin-bottom:50px; width:50%" > Bienvenue dans le jeu de puissance 4, fait pour Driss SENHAJI RHAZI par Hamza SENHAJI RHAZI</h1>
+ <!-- <button id="btn" style="margin-bottom: 10px;background-color:brown;height:30px"type="button">Commencer une Partie</button> -->
+
+</center>
+<div align="center" id="box">
+  <script>
+
+    el = createTable2(6,7)
+    el.appendTo('#box')
+    $('.board button').click(click_handler)
+  </script>
+</div>
+
+
+  <!-- <table align='center'>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+    </table> -->
+
+</body>
+
+</html>

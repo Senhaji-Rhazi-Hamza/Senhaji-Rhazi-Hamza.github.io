@@ -12,6 +12,14 @@
   <title>HSR</title>
 
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $("div[data-includeHTML]").each(function() {
+      $(this).load($(this).attr("data-includeHTML"));
+    });
+  });
+</script>
 
 <body data-spy="scroll" data-target="#navbar-example3" data-offset="150">
 
@@ -42,7 +50,7 @@
             <a href="testimonials.html" class="nav-link">Testimonials</a>
           </li>
           <li class="nav-item">
-            <a href="thoughts&writings.html" class="nav-link">Toughts and writings</a>
+            <a href="thoughts&writings.html" class="nav-link">Tougths and writings</a>
           </li>
         </ul>
         <!-- <ul class="nav navbar-nav navbar-right">
@@ -96,7 +104,7 @@
 
                         <hr class="m-y-md mb-4 mt-4">
             <p style="font-size:100%">
-              This section i aim to share my thoughts and writings in general about life, and i do
+              This section aims to share my thoughts and writings in general about life, and i do
               apologize it will be in french, i do express what i feel better in french, if anyone is
               interested in translation making, please, send an email to <b>hamza.senhajirhazi@gmail.com</b>
               with the token [TRANSLATION] in the object of the mail, thank you !
@@ -107,45 +115,48 @@
           </div>
         </div>
 
+        <div class="el_sec" id="C&B">
+          <center>
+            <h3 class="display-4 mb-5" style="color:rgba(0,200,255,1)"><b>Candide et le borgne</b></h3>
+          </center>
+
+          <div class=" lead text-justify">
+            Candide et le borgne est une série de dialogue principalement entre deux protagonistes chacun avec ses arguments,
+            Candide a une vision plutôt idéaliste du monde et le borgne est trop réaliste pour rêver le monde, tout les deux
+            ont raisons, parfois quand leur débat devient sans fin, le sage intervient et en tranche une issue !
+          </div>
+
+            <div class="m-4" style="font-size:120%" data-includeHTML="resources_thougths/candide&borgne.html"></div>
+
+        </div>
+
 
 
       </div>
 
-      <div class="col-md-3 d-none d-lg-block "  >
-        <div class="" style="top:100px;max-height:80vh; overflow-y:scroll">
+      <div class="col-md-3 d-none d-lg-block ">
 
 
         <nav id="navbar-example3" class="navbar navbar-light bg-light sticky-top " style="top:100px">
+          <div class="" style="top:100px;max-height:80vh; overflow-y:scroll">
 
-          <!-- <nav class="nav nav-pills flex-column">
-            <a class="nav-link" href="#LALG">Linear Algebra for system solving </a>
-
+            <nav class="nav nav-pills flex-column">
+              <a class="nav-link" href="#C&B">Candide et le borgne </a>
+              <!-- <a class="nav-link" href="#PFEXP">Professional experiences</a>
+                <a class="nav-link" href="#SKP">Skills and projects</a> -->
 
               <nav class="nav nav-pills flex-column">
-                <a class="nav-link ml-3 " href="#GSS" style="font-size:90%">Gauss method</a>
-                <a class="nav-link ml-3 " href="#FLU" style="font-size:90%">Factorization LU</a>
-                  <a class="nav-link ml-3 " href="#JGSM" style="font-size:90%">Jacobi and Gauss Seidel method</a>
+                <a class="nav-link ml-3 " href="#IMPR" style="font-size:90%">De l'importance du rêve</a>
+                  <a class="nav-link ml-3 " href="#UCAR" style="font-size:90%">Un Candide arrogant</a>
 
-                <a class="nav-link ml-3 " href="#GCG" style="font-size:90%">Gradient and conjugate gradient method</a>
-                <a class="nav-link ml-3 " href="#NWM" style="font-size:90%">Newton descent</a>
-                  <a class="nav-link ml-3 " href="#GGND" style="font-size:90%">Generalization of gradient and newton descent + lagrangien</a>
+
+                <!-- <a class="nav-link ml-5 " href="#TSA" style="font-size:80%">Twitter sentiment analysis</a> -->
               </nav>
 
-            <a class="nav-link" href="#LG">Machine learning Algorithms</a>
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link ml-3 " href="#LR" style="font-size:90%">Linear regression</a>
-              <a class="nav-link ml-3 " href="#SVM" style="font-size:90%">Support vector machine</a>
-                <a class="nav-link ml-3 " href="#DT" style="font-size:90%">Decision Tree</a>
-
-              <a class="nav-link ml-3 " href="#RF" style="font-size:90%">Random forest</a>
-              <a class="nav-link ml-3 " href="#BC" style="font-size:90%">Bayesian classification</a>
-                <a class="nav-link ml-3 " href="#EM" style="font-size:90%">Expectation maximization (generative mixture models)(generalization of k means)</a>
             </nav>
-            <a class="nav-link" href="#OTHI">Dimentionality reduction</a>
-
-          </nav> -->
+          </div>
         </nav>
-      </div>
+
       </div>
     </div>
   </div>
